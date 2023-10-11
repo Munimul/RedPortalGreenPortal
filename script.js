@@ -6,6 +6,9 @@ let numOfItems = 49;
 // Global variable parentDiv, itemArray
 let itemArray, lastItem, activePlayer;
 
+//Single_Player Mode
+let singlePlayer = false;
+
 //Player Score
 const p1Score = 0;
 const p2Score = 0;
@@ -23,6 +26,8 @@ const portals = {
 // -----------------All HTML Elements------------------
 //Board Element
 const parentDiv = document.querySelector(".board");
+//Single Player Button
+const singlePlayButton = document.querySelector(".singlePlayer");
 // Reset Button
 const reset = document.querySelector(".reset");
 // Player Button
@@ -136,6 +141,14 @@ class Message {
 
 //----------------Game Logic and Utility Functions----------------
 
+//Check for single player Mode
+function singlePlayerMode() {
+  if (singlePlayer) {
+    player2button.textContent = "Computer";
+    singlePlayButton.classList.add("hidden");
+  }
+}
+
 //Function for creating a board with numOfItems
 function createItems(numOfDiv) {
   itemArray = [];
@@ -245,6 +258,9 @@ const message = new Message();
 //---------------------------init function----------
 function init() {
   //------------Initial state-------
+  singlePlayer = false;
+  singlePlayButton.classList.remove("hidden");
+  player2button.textContent = "Player 2";
   p1ScoreEl.textContent = 0;
   p2ScoreEl.textContent = 0;
   board.removeColor(player1.score, p1Color);
@@ -260,16 +276,22 @@ init();
 //-------------------User Input ---------------------
 
 //Button press events
+//Single Player Mode
+singlePlayButton.addEventListener("click", function () {
+  singlePlayer = true;
+  singlePlayerMode();
+});
 
 //Player 1 keyboard key 'a'
 document.addEventListener("keydown", function (keyObj) {
-  if (keyObj.key === "a" && activePlayer === 1) {
-    playLogic(player1, p1Color, 2);
-  }
+  if (keyObj.key === "a" && activePlayer === 1) playLogic(player1, p1Color, 2);
+  if (singlePlayer && activePlayer === 2) playLogic(player2, p2Color, 1);
 });
-// Player 2 keyboard key 'Enter'
+
+// Player 2 keyboard key 'Insert'
+
 document.addEventListener("keydown", function (keyObj) {
-  if (keyObj.key === "Insert" && activePlayer === 2) {
+  if (keyObj.key === "Insert" && activePlayer === 2 && singlePlayer === false) {
     playLogic(player2, p2Color, 1);
   }
 });
