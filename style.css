@@ -1,63 +1,97 @@
-div {
+body {
+  background-color: #0093e9;
+  background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
 }
 
 .hidden {
   display: none;
 }
+.playerBar {
+  padding: 1rem;
+  text-align: center;
+}
+.leftPlayer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #fbda61;
+  background-image: linear-gradient(45deg, #fbda61 0%, #ff5acd 100%);
+  width: 6rem;
+  height: 8rem;
+  display: inline-block;
+}
+
+img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 30%;
+}
+.rightPlayer {
+  width: 6rem;
+  height: 8rem;
+  padding: 1rem;
+  text-align: center;
+  background-color: #21d4fd;
+  background-image: linear-gradient(19deg, #21d4fd 0%, #b721ff 100%);
+  display: inline-block;
+}
+
+.message {
+  margin: 2rem;
+  padding: 1rem;
+  text-align: center;
+}
 .board {
   min-width: 104px;
-  max-width: 100%;
+  max-width: 95%;
   padding: 2rem;
-  margin: 1rem;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  padding-bottom: 15rem;
 }
 
 .item {
   border: solid;
-  border-color: azure;
-  background-color: bisque;
-  width: 3rem;
-  height: 3rem;
+  border-color: rgb(201, 234, 255);
+
+  background-color: blanchedalmond;
+
+  width: 1.5rem;
+  height: 1.5rem;
   float: left;
   text-align: center;
   padding: 1rem;
 }
 
-.playerBar {
-  min-width: 104px;
+.yellow {
+  background-color: #fbda61;
+  background-image: linear-gradient(45deg, #fbda61 0%, #ff5acd 100%);
 
-  display: flex;
-  padding: 2rem;
-  margin-bottom: 0 auto;
-  position: relative;
+  border-radius: 50%;
 }
-.leftPlayer {
-  width: 5rem;
-  height: 5rem;
+.blue {
+  background-color: #21d4fd;
+  background-image: linear-gradient(19deg, #21d4fd 0%, #b721ff 100%);
 
-  text-align: center;
-  padding: 1rem;
-  position: absolute;
+  border-radius: 50%;
 }
-.dice {
-  width: 5rem;
-  height: 5rem;
-  position: relative;
-  margin-left: 45%;
-  border: solid;
+.black {
+  background-color: black;
+  border-radius: 50%;
 }
-img {
-  width: 5rem;
-  height: 5rem;
-}
-.rightPlayer {
-  right: 0;
-  width: 5rem;
-  height: 5rem;
-  padding: 1rem;
-  text-align: center;
-  position: absolute;
+
+.red {
+  background-color: red;
+
+  border-radius: 30%;
 }
 
 .green {
-  background-color: aquamarine;
+  background-color: green;
+
+  border-radius: 30%;
+}
+
+.portalEffect {
+  border-radius: 40%;
+  background-color: azure;
 }
