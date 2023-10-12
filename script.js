@@ -4,7 +4,7 @@
 let numOfItems = 49;
 
 // Global variable parentDiv, itemArray
-let itemArray, lastItem, activePlayer;
+let itemArray, lastItem, activePlayer, boardNum, playerNum;
 
 //Single_Player Mode
 let singlePlayer = false;
@@ -24,6 +24,19 @@ const portals = {
 };
 
 // -----------------All HTML Elements------------------
+///-----------boardItem--------
+// Board Container
+const boardContainer = document.querySelector(".gameContainer");
+
+// Modal or requirement div
+const modal = document.querySelector(".modal");
+
+//Board Size selector
+const boardSize = document.getElementById("boardSize");
+//Player Number selector
+const playerNumber = document.getElementById("playerNumber");
+// Start Button
+const start = document.getElementById("start");
 //Board Element
 const parentDiv = document.querySelector(".board");
 //Single Player Button
@@ -137,16 +150,28 @@ class Message {
       numOfItems + 1 - score
     }`;
   }
+  loseMessage() {
+    messageEl.textContent = "You loose, Computer Wins!";
+  }
 }
 
 //----------------Game Logic and Utility Functions----------------
 
-//Check for single player Mode
-function singlePlayerMode() {
-  if (singlePlayer) {
-    player2button.textContent = "Computer";
-    singlePlayButton.classList.add("hidden");
-  }
+//Game start with requirements
+function boardRequirements() {
+  start.addEventListener("click", function () {
+    boardNum = parseInt(boardSize.options[boardSize.selectedIndex].value);
+    playerNum = parseInt(
+      playerNumber.options[playerNumber.selectedIndex].value
+    );
+    boardContainer.classList.remove("hidden");
+    modal.classList.add("hidden");
+    //Single Player or 2 player mode
+    if (playerNum === 1) player2button.textContent = "Computer";
+    else {
+      player2button.textContent = "Player 2";
+    }
+  });
 }
 
 //Function for creating a board with numOfItems
@@ -207,11 +232,12 @@ function playLogic(player, color, tooglePlayer) {
     //3.2 if score is equal to winning number
   } else if (roll + player.score === numOfItems + 1) {
     player.addScore(roll);
-    message.winMessage(activePlayer);
+    if (playerNum === 1 && player.playerId === 2) message.loseMessage();
+    else {
+      message.winMessage(activePlayer);
+    }
     player.showScore();
     board.addColor(player.score, color);
-    //tooglePlayer === 1 ? alert("Player 2 Wins!") : alert("Player 1 Wins!");
-    console.log(tooglePlayer === 1 ? "Player 2 Wins!" : "Player 1 Wins!");
     activePlayer = 0;
     //3.3 greater than winning number. Player will have to wait
   } else {
@@ -258,9 +284,9 @@ const message = new Message();
 //---------------------------init function----------
 function init() {
   //------------Initial state-------
-  singlePlayer = false;
-  singlePlayButton.classList.remove("hidden");
-  player2button.textContent = "Player 2";
+  modal.classList.remove("hidden");
+  boardContainer.classList.add("hidden");
+  boardRequirements();
   p1ScoreEl.textContent = 0;
   p2ScoreEl.textContent = 0;
   board.removeColor(player1.score, p1Color);
@@ -276,22 +302,17 @@ init();
 //-------------------User Input ---------------------
 
 //Button press events
-//Single Player Mode
-singlePlayButton.addEventListener("click", function () {
-  singlePlayer = true;
-  singlePlayerMode();
-});
 
 //Player 1 keyboard key 'a'
 document.addEventListener("keydown", function (keyObj) {
   if (keyObj.key === "a" && activePlayer === 1) playLogic(player1, p1Color, 2);
-  if (singlePlayer && activePlayer === 2) playLogic(player2, p2Color, 1);
+  if (playerNum === 1 && activePlayer === 2) playLogic(player2, p2Color, 1);
 });
 
 // Player 2 keyboard key 'Insert'
 
 document.addEventListener("keydown", function (keyObj) {
-  if (keyObj.key === "Insert" && activePlayer === 2 && singlePlayer === false) {
+  if (keyObj.key === "Insert" && activePlayer === 2 && playerNum === 2) {
     playLogic(player2, p2Color, 1);
   }
 });
@@ -300,19 +321,3 @@ document.addEventListener("keydown", function (keyObj) {
 reset.addEventListener("click", function () {
   init();
 });
-
-///-----------boardItem--------
-const boardsize = document.querySelectorAll(".boardsize");
-const playerSelect = document.querySelectorAll(".playerSelect");
-
-for (let i = 0; i < 2; i++) {
-  playerSelect[i].addEventListener("click", function () {
-    console.log(playerSelect[i].textContent);
-  });
-}
-
-for (let i = 0; i < 3; i++) {
-  boardsize[i].addEventListener("click", function () {
-    console.log(boardsize[i].textContent);
-  });
-}
