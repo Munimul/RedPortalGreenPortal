@@ -15,12 +15,12 @@ const p2Score = 0;
 
 //Portal numbers
 const portals = {
-  greenPortals: [5, 17, 26, 31, 40],
-  greenPortalAdd: [6, 7, 3, 9, 7],
-  // places       [11, 24,29, 41,  47]
-  //places        [1, 9, 10,  26, 28,34]
-  redPortals: [8, 13, 21, 32, 39, 46],
-  redPortalMinus: [-7, -4, -11, -6, -11, -12],
+  greenPortals: [5, 17, 26, 31, 40, 53, 65, 74, 84, 91],
+  greenPortalAdd: [6, 7, 3, 9, 7, 11, 3, 5, 6, 8],
+  // places       [11, 24,29, 41,  47,64,68,79,90,99]
+  //places        [1, 9, 10,  26, 28,34,51,58,73]
+  redPortals: [8, 13, 21, 32, 39, 46, 57, 69, 80, 88, 97],
+  redPortalMinus: [-7, -4, -11, -6, -11, -12, -6, -11, -7, -18, -3],
 };
 
 // -----------------All HTML Elements------------------
@@ -286,8 +286,7 @@ function init() {
   board.removeColor(player2.score, p2Color);
   player1.resetScore();
   player2.resetScore();
-  activePlayer = 1;
-  message.turnMessage(1);
+  activePlayer = 0;
 }
 
 init();
@@ -301,11 +300,23 @@ document.addEventListener("keydown", function (keyObj) {
   if (keyObj.key === "a" && activePlayer === 1) playLogic(player1, p1Color, 2);
   if (playerNum === 1 && activePlayer === 2) playLogic(player2, p2Color, 1);
 });
+// Player 1 button click
+player1button.addEventListener("click", function () {
+  if (activePlayer === 1) playLogic(player1, p1Color, 2);
+  if (playerNum === 1 && activePlayer === 2) playLogic(player2, p2Color, 1);
+});
 
 // Player 2 keyboard key 'Insert'
 
 document.addEventListener("keydown", function (keyObj) {
   if (keyObj.key === "Insert" && activePlayer === 2 && playerNum === 2) {
+    playLogic(player2, p2Color, 1);
+  }
+});
+
+//Player 2 button click
+player2button.addEventListener("click", function () {
+  if (activePlayer === 2 && playerNum === 2) {
     playLogic(player2, p2Color, 1);
   }
 });
@@ -327,4 +338,6 @@ start.addEventListener("click", function () {
   else {
     player2button.textContent = "Player 2";
   }
+  message.turnMessage(1);
+  activePlayer = 1;
 });
