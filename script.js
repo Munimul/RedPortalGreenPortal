@@ -1,7 +1,7 @@
 "use strict";
 
 // Board Item number
-let numOfItems = 49;
+let numOfItems = 100;
 
 // Global variable parentDiv, itemArray
 let itemArray, lastItem, activePlayer, boardNum, playerNum;
@@ -15,12 +15,12 @@ const p2Score = 0;
 
 //Portal numbers
 const portals = {
-  greenPortals: [5, 17, 24, 32],
-  greenPortalAdd: [6, 9, 3, 9],
-  // places      [11,26,27,41]
-  //places        [1,9,10,25,6]
-  redPortals: [8, 13, 21, 28, 39],
-  redPortalMinus: [-7, -4, -11, -3, -33],
+  greenPortals: [5, 17, 26, 31, 40],
+  greenPortalAdd: [6, 7, 3, 9, 7],
+  // places       [11, 24,29, 41,  47]
+  //places        [1, 9, 10,  26, 28,34]
+  redPortals: [8, 13, 21, 32, 39, 46],
+  redPortalMinus: [-7, -4, -11, -6, -11, -12],
 };
 
 // -----------------All HTML Elements------------------
@@ -147,7 +147,7 @@ class Message {
   }
   anyMessage(playerId, score) {
     messageEl.textContent = `Very Close! Player ${playerId}! You need a ${
-      numOfItems + 1 - score
+      boardNum - score
     }`;
   }
   loseMessage() {
@@ -156,25 +156,8 @@ class Message {
 }
 
 //----------------Game Logic and Utility Functions----------------
-
-//Game start with requirements
-function boardRequirements() {
-  start.addEventListener("click", function () {
-    boardNum = parseInt(boardSize.options[boardSize.selectedIndex].value);
-    playerNum = parseInt(
-      playerNumber.options[playerNumber.selectedIndex].value
-    );
-    boardContainer.classList.remove("hidden");
-    modal.classList.add("hidden");
-    //Single Player or 2 player mode
-    if (playerNum === 1) player2button.textContent = "Computer";
-    else {
-      player2button.textContent = "Player 2";
-    }
-  });
-}
-
 //Function for creating a board with numOfItems
+// Create 100 tiles the max size of board
 function createItems(numOfDiv) {
   itemArray = [];
   for (let i = 0; i <= numOfDiv + 1; i++) {
@@ -203,7 +186,7 @@ function playLogic(player, color, tooglePlayer) {
   //2. Roll dice
   let roll = rollDice(player.playerId);
   //3.1 If score is less than last tile number
-  if (roll + player.score < numOfItems + 1) {
+  if (roll + player.score < boardNum) {
     player.addScore(roll);
     //3.1.1 if it falls in portals
     if (
@@ -230,7 +213,7 @@ function playLogic(player, color, tooglePlayer) {
 
     activePlayer = tooglePlayer;
     //3.2 if score is equal to winning number
-  } else if (roll + player.score === numOfItems + 1) {
+  } else if (roll + player.score === boardNum) {
     player.addScore(roll);
     if (playerNum === 1 && player.playerId === 2) message.loseMessage();
     else {
@@ -252,6 +235,7 @@ function playLogic(player, color, tooglePlayer) {
 
 // Create Board Layout
 function boardLayout() {
+  //Max size of Board
   createItems(numOfItems);
 
   // Start and End tiles
@@ -265,19 +249,28 @@ function boardLayout() {
     itemArray[portals.redPortals[i]].classList.add("red");
   }
 }
+function newBoard(boardNum) {
+  // Remove End tiles from 25,50 and 100
+  for (let i = 0; i <= 101; i++) {
+    itemArray[i].classList.remove("hidden");
+  }
+  itemArray[25].textContent = 25;
+  itemArray[50].textContent = 50;
+  //At end tiles to boardNum
+  itemArray[boardNum].textContent = "End";
+  for (let i = boardNum + 1; i <= 101; i++) {
+    itemArray[i].classList.add("hidden");
+  }
+}
 
 //-----------Object Initialize--------
 // Layout Board
 boardLayout();
-
 // Board object
 const board = new Board(itemArray, p1Color, p2Color, bothColor);
-
 // Player Object initialize/create
-
 const player1 = new Player(p1Score, p1ScoreEl, 1);
 const player2 = new Player(p2Score, p2ScoreEl, 2);
-
 //message Object
 const message = new Message();
 
@@ -286,7 +279,7 @@ function init() {
   //------------Initial state-------
   modal.classList.remove("hidden");
   boardContainer.classList.add("hidden");
-  boardRequirements();
+  //boardRequirements();
   p1ScoreEl.textContent = 0;
   p2ScoreEl.textContent = 0;
   board.removeColor(player1.score, p1Color);
@@ -320,4 +313,18 @@ document.addEventListener("keydown", function (keyObj) {
 // Reset Game
 reset.addEventListener("click", function () {
   init();
+});
+
+//Start button || shows board, hides modal
+start.addEventListener("click", function () {
+  boardNum = parseInt(boardSize.options[boardSize.selectedIndex].value);
+  playerNum = parseInt(playerNumber.options[playerNumber.selectedIndex].value);
+  newBoard(boardNum);
+  boardContainer.classList.remove("hidden");
+  modal.classList.add("hidden");
+  //Single Player or 2 player mode
+  if (playerNum === 1) player2button.textContent = "Computer";
+  else {
+    player2button.textContent = "Player 2";
+  }
 });
