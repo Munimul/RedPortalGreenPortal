@@ -300,3 +300,19 @@ document.addEventListener("keydown", function (keyObj) {
 reset.addEventListener("click", function () {
   init();
 });
+
+///-----------boardItem--------
+const boardsize = document.querySelectorAll(".boardsize");
+const playerSelect = document.querySelectorAll(".playerSelect");
+
+for (let i = 0; i < 2; i++) {
+  playerSelect[i].addEventListener("click", function () {
+    console.log(playerSelect[i].textContent);
+  });
+}
+
+for (let i = 0; i < 3; i++) {
+  boardsize[i].addEventListener("click", function () {
+    console.log(boardsize[i].textContent);
+  });
+}
